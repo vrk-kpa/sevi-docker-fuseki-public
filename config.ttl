@@ -1,0 +1,55 @@
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix tdb:     <http://jena.hpl.hp.com/2008/tdb#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix :        <#> .
+
+<#all> rdf:type fuseki:Service ;
+    fuseki:name                       "/all" ;     # http://host:port/all
+    fuseki:serviceQuery               "sparql" ;   # SPARQL query service
+#    fuseki:serviceUpdate              "update" ;   # SPARQL update service
+    fuseki:serviceUpload              "upload" ;   # Non-SPARQL upload service
+#    fuseki:serviceReadWriteGraphStore "data" ;     # SPARQL Graph store protocol (read and write)
+    fuseki:dataset                   <#datasetAll> ;
+    .
+
+<#allNoInference> rdf:type fuseki:Service ;
+    fuseki:name                       "/all_no_inference" ;     # http://host:port/all
+    fuseki:serviceQuery               "sparql" ;   # SPARQL query service
+#    fuseki:serviceUpdate              "update" ;   # SPARQL update service
+    fuseki:serviceUpload              "upload" ;   # Non-SPARQL upload service
+#    fuseki:serviceReadWriteGraphStore "data" ;     # SPARQL Graph store protocol (read and write)
+    fuseki:dataset                   <#datasetAllNoInference> ;
+    .
+
+<#datasetAll> rdf:type      ja:RDFDataset ;
+    ja:defaultGraph <#modelAll> ;
+    # Query timeout on this dataset (60s, 60000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "60000" ] ;
+    .
+
+<#datasetAllNoInference> rdf:type      ja:RDFDataset ;
+    ja:defaultGraph <#modelAllNoInference> ;
+    # Query timeout on this dataset (60s, 60000 milliseconds)
+    ja:context [ ja:cxtName "arq:queryTimeout" ;  ja:cxtValue "60000" ] ;
+    .
+
+<#modelAllNoInference> a ja:InfModel ;
+    ja:baseModel <#graphAll> ;
+    .
+
+<#modelAll> a ja:InfModel ;
+    ja:reasoner
+#       [ ja:reasonerURL <http://jena.hpl.hp.com/2003/GenericRuleReasoner> ; ] ;
+#       [ ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLFBRuleReasoner> ; ] ;
+#       [ ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLMiniFBRuleReasoner> ; ] ;
+       [ ja:reasonerURL <http://jena.hpl.hp.com/2003/OWLMicroFBRuleReasoner> ; ] ;
+# Pellet reasoner does not work with Finnish ontologies, as they are inconsistent.
+# For example, yso:p4556 is both a skos:Concept and disjoint with skos:Concept
+#        [ ja:reasonerClass "org.mindswap.pellet.jena.PelletReasonerFactory" ; ] ;
+    ja:baseModel <#graphAll> ;
+    .
+
+<#graphAll> rdf:type ja:MemoryModel ;
+    .
