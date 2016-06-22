@@ -16,17 +16,17 @@ RUN \
   apt-get install -y oracle-java8-installer && \
   apt-get install -y ca-certificates && \
   apt-get install -y oracle-java8-unlimited-jce-policy && \
-  # apt-get install -y maven && \
+#  apt-get install -y maven && \
   rm -rf /var/lib/apt/lists/* && \
   rm -rf /var/cache/oracle-jdk8-installer
 
 # Define JAVA_HOME
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV PATH /jena-fuseki:$PATH
-ENV JVM_ARGS -Xmx2048M
+ENV JVM_ARGS -Xms2048M -Xmx2048M
 
 #Download fuseki
-RUN wget -O fuseki.tar.gz https://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-2.3.1.tar.gz && \
+RUN wget -O fuseki.tar.gz http://www.nic.funet.fi/pub/mirrors/apache.org/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz && \
     tar zxf fuseki.tar.gz && \
     mv apache-jena-fuseki* /jena-fuseki && \
     rm fuseki.tar.gz* && \
@@ -58,4 +58,4 @@ WORKDIR /jena-fuseki
 EXPOSE 3030
 
 ENTRYPOINT ["start.sh"]
-CMD ["--config=/jena-fuseki/config.ttl"]
+CMD ["--help"]
