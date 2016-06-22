@@ -1,37 +1,12 @@
 # Pull base image
-FROM ubuntu:14.04
-
-# Install common tools
-RUN \
-  apt-get update && \
-  apt-get -y install python-software-properties && \
-  apt-get -y install software-properties-common
-
-# Install Java
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-  add-apt-repository ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y curl && \
-  apt-get install -y oracle-java8-installer && \
-  apt-get install -y ca-certificates && \
-  apt-get install -y oracle-java8-unlimited-jce-policy && \
-#  apt-get install -y maven && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
-
-# Define JAVA_HOME
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-ENV PATH /jena-fuseki:$PATH
-ENV JVM_ARGS -Xms2048M -Xmx2048M
+FROM java:8-jre
 
 #Download fuseki
 RUN wget -O fuseki.tar.gz http://www.nic.funet.fi/pub/mirrors/apache.org/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz && \
     tar zxf fuseki.tar.gz && \
     mv apache-jena-fuseki* /jena-fuseki && \
     rm fuseki.tar.gz* && \
-    cd /jena-fuseki && \
-    mkdir DB
+    cd /jena-fuseki
 
 #Download Pellet reasoner
 # Note: The following does not work with the new Jena.
@@ -52,10 +27,8 @@ COPY ontologies/* /jena-fuseki/ontologies/
 COPY scripts/upload.sh /jena-fuseki/upload.sh
 COPY scripts/start.sh /jena-fuseki/start.sh
 
-#VOLUME /jena-fuseki/data
-
+ENV PATH /jena-fuseki:$PATH
 WORKDIR /jena-fuseki
 EXPOSE 3030
 
 ENTRYPOINT ["start.sh"]
-CMD ["--help"]
