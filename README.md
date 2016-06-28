@@ -5,8 +5,8 @@ This application is part of the [National Architecture for Digital Services prog
 
 ## Building the image
 
-docker build -t sevi-fuseki .
+`./build.sh`
 
 ## Running the image 
 
-docker run --name sevi-fuseki -p 3030:3030 sevi-fuseki
+docker run --name sevi-fuseki -p 3030:3030 sevi/sevi-fuseki
