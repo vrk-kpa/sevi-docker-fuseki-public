@@ -2,7 +2,7 @@
 FROM java:8-jre
 
 #Download fuseki
-RUN wget -O fuseki.tar.gz http://www.nic.funet.fi/pub/mirrors/apache.org/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz && \
+RUN wget -O fuseki.tar.gz http://www.nic.funet.fi/pub/mirrors/apache.org/jena/binaries/apache-jena-fuseki-2.6.0.tar.gz && \
     tar zxf fuseki.tar.gz && \
     mv apache-jena-fuseki* /jena-fuseki && \
     rm fuseki.tar.gz* && \
